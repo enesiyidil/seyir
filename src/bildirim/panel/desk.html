@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Mac-M4 · Uzaktan erişim</title>
+<style>
+*{box-sizing:border-box} :root{font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e9eef5;background:#101419;--line:#35414e;--muted:#a8b6c6;--mint:#87e2c0}
+body{margin:0} main{max-width:1680px;margin:auto;padding:16px clamp(12px,2vw,32px) 24px}
+header,.bar,.row,.panel-head{display:flex;align-items:center;gap:10px}
+header{justify-content:space-between;margin-bottom:14px} h1,h2,p{margin:0} h1{font-size:1.25rem;letter-spacing:-.04em} h2{font-size:1rem} .status,small{font-size:.83rem;color:var(--muted)}
+#connection::before{content:"";display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#f3b963} #connection.ok::before{background:var(--mint)}
+.layout{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(285px,1fr);gap:14px;align-items:start}
+section{border:1px solid var(--line);border-radius:16px;background:#1b222a;overflow:hidden;min-width:0}
+.stage{background:#090d11;height:clamp(260px,62vh,780px);display:flex;align-items:center;justify-content:center;position:relative}
+#view{display:block;width:auto;height:auto;max-width:100%;max-height:100%;touch-action:none;user-select:none;-webkit-touch-callout:none}
+#view:not([src]){visibility:hidden} #frameHint{position:absolute;padding:10px 14px;background:#151b22ef;border-radius:9px;text-align:center;max-width:90%;pointer-events:none}
+.controls,.panel-head,.composer{padding:14px}.controls{display:grid;gap:10px}.bar{justify-content:space-between;flex-wrap:wrap}.row{gap:6px;flex-wrap:wrap}
+button,select,input{font:inherit;color:inherit;border-radius:9px;border:1px solid #435160;background:#28323c;min-height:44px;padding:8px 12px}
+input{min-width:0;flex:1;background:#131a21} input::placeholder{color:#a4b0bf} button,select{cursor:pointer} button:hover{background:#354352} button:disabled{opacity:.45;cursor:wait} :focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.primary{background:var(--mint);color:#10291f;border-color:transparent;font-weight:650}.primary:hover{background:#a4f1d5}
+#mic[aria-pressed="true"]{background:#593337;border-color:#b76a71;color:#fff}.panel-head{justify-content:space-between;border-bottom:1px solid var(--line)}
+#voiceState{display:block;color:var(--mint);min-height:1.3em;margin-top:3px} #log{height:clamp(160px,40vh,520px);overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.turn{font-size:.96rem;white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}.turn small{display:block;font-weight:600;margin-bottom:2px}.mine{align-self:flex-end;background:#2c3844;padding:7px 11px;border-radius:10px}.reply small{color:var(--mint)}
+form{display:flex;gap:6px}.composer{border-top:1px solid var(--line)}details summary{cursor:pointer;color:var(--muted);padding:6px 0}details form{margin:8px 0}#controlState{min-height:1.4em}
+@media(max-width:800px){main{padding:10px 10px max(16px,env(safe-area-inset-bottom))}.layout{grid-template-columns:1fr;gap:10px}.stage{height:clamp(160px,30dvh,370px)}header{margin:0 4px 8px}.controls,.panel-head,.composer{padding:10px}#log{height:145px}.controls{gap:6px}}
+@media(max-height:520px) and (min-width:680px){.layout{grid-template-columns:minmax(0,1.6fr) minmax(240px,1fr)}.stage{height:52dvh}#log{height:35dvh}}
+</style>
+<main>
+<header><h1>Mac-M4</h1><span class="status" id="connection" role="status">Bağlanıyor</span></header>
+<div class="layout">
+<section aria-label="Mac masaüstü">
+<div class="stage"><img id="view" draggable="false" alt="Mac ana ekranı"><span id="frameHint">Ekran bekleniyor…</span></div>
+<div class="controls">
+<div class="bar"><label>Dokunma <select id="pointerMode"><option value="click">Tıkla</option><option value="double">Çift tıkla</option><option value="right">Sağ tıkla</option><option value="drag">Sürükle</option></select></label>
+<div class="row"><button data-scroll="6" aria-label="Yukarı kaydır">↑ Kaydır</button><button data-scroll="-6" aria-label="Aşağı kaydır">↓ Kaydır</button></div></div>
+<details><summary>Klavye ve metin girişi</summary>
+<form id="typeForm"><input id="macText" placeholder="Mac’te odaklanan alana yaz" aria-label="Mac’e yazılacak metin" maxlength="2000" required><button>Mac’e yaz</button></form>
+<div class="row"><button data-key="enter">Enter</button><button data-key="escape">Esc</button><button data-key="tab">Tab</button><button data-key="delete">Sil</button><button data-key="left" aria-label="Sol ok">←</button><button data-key="right" aria-label="Sağ ok">→</button><button data-key="up" aria-label="Yukarı ok">↑</button><button data-key="down" aria-label="Aşağı ok">↓</button></div></details>
+<small id="controlState" role="status">İşlem yapmak için görüntüye dokun.</small>
+</div></section>
+<section aria-label="Ekran asistanı"><div class="panel-head"><div><h2>Ekran asistanı</h2><small id="voiceState" role="status">Mikrofon kapalı</small></div><button type="button" class="primary" id="mic" aria-pressed="false">Konuşmayı aç</button></div>
+<details style="padding:0 14px"><summary>Sesli komut örnekleri</summary>
+<ul><li>“Ekranı sağa kaydır” ile sağ masaüstüne geç.</li><li>“Sayfayı sağa kaydır” ile içerikte ilerle.</li>
+<li>“Codex’e merhaba yaz” ile taslak hazırla.</li><li>“Teams’ten Ayşe Yılmaz’a şunu yaz: Toplantıya katılabilirim.”</li>
+<li>“Hangi uygulamalar açık?”, “Safari’ye geç”, “İmleci sağa 80 piksel taşı”, “Çift tıkla”.</li></ul></details>
+<div id="log" role="log" aria-live="polite"></div>
+<form class="composer" id="chat"><input id="question" aria-label="Asistana mesaj" maxlength="2000" placeholder="Ekran hakkında sor…" required><button>Gönder</button></form>
+</section></div></main>
+<script type="module" src="/desk.js"></script>
+</html>

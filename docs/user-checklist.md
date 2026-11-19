@@ -1,12 +1,12 @@
-# İlk kullanım kontrolü
+# First-run checklist
 
-| Deneme | Beklenen sonuç |
+| Try this | Expected result |
 | --- | --- |
-| Mail konusunda kendi botuna `/ping` yaz. | İzin listesindeki kullanıcı `pong (mail)` yanıtını alır. |
-| Önemli bir deneme bildiriminin üstüne yanıt olarak **içerik** yaz. | İlgili iletinin kayıtlı gövde önizlemesi aynı konuda görünür. |
-| Cursor’da yeni bir Agent oturumu aç ve bir deneme mesajı yaz. | Proje adı ve kısa oturum kimliğiyle bir konu görünür. |
-| Mac-M4 konusunda `/oturumlar` yaz. | Liste yeni Cursor oturumunu içerir. |
-| Mac-M4 konusunda `/ekran` yaz ve telefonda aç. | Mac’in ana ekranı görünür. |
-| **Konuşmayı aç** düğmesinden “Hangi uygulamalar açık?” de. | Mikrofon sesi alınır ve Mac’ten sesli yanıt gelir. |
-| Codex’te boş bir deneme sohbeti açıkken “Codex’e merhaba yaz” de. | Mesaj kutusunda düzenlenebilir **merhaba** taslağı görünür. |
-| Telegram’da `/ekran dur` yaz. | Telefonda ekran ve kontrol oturumu sona erer. |
+| Send `/ping` to the mail bot in the Mail topic. | An allowed user receives `pong (mail)`. |
+| Reply to an important test alert with `içerik`. | A preview of that message appears in the same topic. |
+| Open a new Cursor agent session and enter a test prompt. | A topic appears with the project name and short session ID. |
+| Send `/oturumlar` in the Mac-M4 topic. | The new Cursor session appears in the list. |
+| Send `/ekran` in Mac-M4 and open the link on your phone. | The Mac desktop appears. |
+| Tap **Konuşmayı aç** and say “Hangi uygulamalar açık?” (“Which apps are open?”). | The Mac receives microphone input and returns a spoken response. |
+| Open an empty test chat in Codex and say “Codex’e merhaba yaz”. | An editable greeting appears in the message box. |
+| Send `/ekran dur` in Telegram. | The phone's screen and control session ends. |

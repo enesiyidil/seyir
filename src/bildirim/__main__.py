@@ -13,40 +13,40 @@ from bildirim.config import AGENT_ROLES, ROLE_TOKEN_ENV, load_settings
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="seyir",
-        description="Seyir ile Apple Mail, Cursor ve Mac masaüstüne Telegram üzerinden eriş.",
+        description="Access Apple Mail, Cursor sessions, and your Mac desktop through Telegram.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser(
         "mail",
-        help="E-posta botu + Exchange izleyici (Apple Mail → Qwen → Telegram).",
+        help="Start the mail bot and watch Apple Mail with local Qwen.",
     )
     once = sub.add_parser(
         "mail-once",
-        help="Gelen kutusunu bir kez tara, çık.",
+        help="Scan the inbox once and exit.",
     )
 
     agent = sub.add_parser(
         "agent",
-        help="Bilgisayar botu. mac-m4: IDE mirror + /limit /dur /oturumlar; diğerleri /ping.",
+        help="Start the Mac desktop and Cursor bot (mac-m4), or a ping-only role.",
     )
     agent.add_argument("--role", required=True, choices=AGENT_ROLES)
 
-    helper = sub.add_parser("id-helper", help="Grup, konu ve kullanıcı numarasını yazdırır.")
+    helper = sub.add_parser("id-helper", help="Show the Telegram group, topic, and user IDs for setup.")
     helper.add_argument(
         "--role",
         default="mail",
         choices=tuple(ROLE_TOKEN_ENV),
-        help="Hangi botun tokenı ile dinlensin. Varsayılan: mail.",
+        help="Bot role to listen with (default: mail).",
     )
 
     sub.add_parser(
         "cursor-auth",
-        help="Verdiğiniz Cursor oturum anahtarını yerel olarak kaydeder (/limit için).",
+        help="Save a supplied Cursor session token locally for usage queries.",
     )
     sub.add_parser(
         "limit",
-        help="Cursor kullanım özetini yazdırır (Telegram /limit ile aynı).",
+        help="Print the Cursor usage summary (also available as /limit in Telegram).",
     )
 
     args = parser.parse_args(argv)
@@ -62,7 +62,7 @@ def main(argv: list[str] | None = None) -> None:
         token = settings.token("mail")
         store = ProcessedStore(default_path(project_root()))
         count = process_once(settings, store, token)
-        print(f"İşlenen yeni mail: {count}")
+        print(f"New messages processed: {count}")
         return
     if args.command == "agent":
         run_agent(settings, args.role)
@@ -82,7 +82,7 @@ def main(argv: list[str] | None = None) -> None:
         result = fetch_usage_summary()
         print(result.text)
         raise SystemExit(0 if result.ok else 1)
-    raise SystemExit(f"Bilinmeyen komut: {args.command}")
+    raise SystemExit(f"Unknown command: {args.command}")
 
 
 if __name__ == "__main__":

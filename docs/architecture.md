@@ -1,26 +1,26 @@
-# Veri akışı
+# Data flow
 
 ```mermaid
 flowchart LR
-  Mail[Apple Mail] --> Rules[Posta kuralları]
-  Rules --> Qwen[Yerel Qwen]
-  Qwen --> MailBot[Mail botu]
-  MailBot --> Topic[Telegram Mail konusu]
-  IDE[Cursor hook] --> Bridge[Yerel HTTP köprüsü]
-  Bridge --> Agent[Mac botu]
-  Agent --> Topics[Telegram oturum konuları]
-  Phone[Telefon tarayıcısı] <-->|HTTPS| Tunnel[Cloudflare tüneli]
-  Tunnel <--> Panel[Mac ekran ve ses paneli]
-  Panel --> Mac[macOS giriş ve görüntü]
+  Mail[Apple Mail] --> Rules[Mail rules]
+  Rules --> Qwen[Local Qwen]
+  Qwen --> MailBot[Mail bot]
+  MailBot --> Topic[Telegram mail topic]
+  IDE[Cursor hook] --> Bridge[Local HTTP bridge]
+  Bridge --> Agent[Mac bot]
+  Agent --> Topics[Telegram session topics]
+  Phone[Phone browser] <-->|HTTPS| Tunnel[Cloudflare tunnel]
+  Tunnel <--> Panel[Desktop and voice panel]
+  Panel --> Mac[macOS input and display]
   Panel --> Model[Cursor CLI / Grok]
 ```
 
-Botlar ayrı süreçlerdir. Sayısal grup ve konu kimlikleri bildirimlerin hedefini, kullanıcı listesi komutları kimin verebildiğini belirler. Masaüstü paneli ayrı bir oturum bağlantısıyla açılır. Cursor oturum izleri ve konu hafızası yerel `data/` dizinindedir.
+The two bots run as separate processes. Numeric group and topic IDs determine where notifications go. An allowlist controls who can issue Telegram commands. The desktop panel uses a separate per-session access link. Cursor traces and topic history are stored under `data/` on the Mac.
 
-## Geliştirme geçmişi
+## Development history
 
-| Tarih | Projedeki çalışma |
+| Date | Work |
 | --- | --- |
-| 17 Kasım 2026 | Apple Mail ve Qwen bildirimleri, Cursor oturumlarının Telegram konularına aktarılması. |
-| 18 Kasım 2026 | Mobil ekran paneli, Türkçe sesli giriş ve uygulamalarda taslak yazma testleri. |
-| 19 Kasım 2026 | İlk Git kaydı, kişisel yapılandırmanın ayrılması, taşınabilir kurulum ve macOS test iş akışı. |
+| November 17, 2026 | Apple Mail notifications with Qwen and Cursor session mirroring to Telegram topics. |
+| November 18, 2026 | Mobile screen panel, Turkish voice input, and tests for drafting messages in desktop apps. |
+| November 19, 2026 | Initial Git history, separation of personal settings, portable setup, and macOS CI. |

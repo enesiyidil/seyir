@@ -1,9 +1,9 @@
-# Telegram botlarını bağlama
+# Connect the Telegram bots
 
-1. Telegram’da resmi `@BotFather` sohbetinde `/newbot` yaz. Görünen ad olarak **Seyir Mail** veya **Seyir Mac** kullanabilirsin. Kullanıcı adının benzersiz olması ve `bot` ile bitmesi gerekir.
-2. Mail için aldığın tokenı `TELEGRAM_BOT_TOKEN_MAIL`, Mac için aldığını `TELEGRAM_BOT_TOKEN_MAC_M4` olarak yerel `.env` dosyasına kaydet.
-3. Botu özel forum grubuna ekle. Mac botunu yönetici yapıp konu yönetme izni ver. Böylece oturum konusu açabilir ve o konudaki düz metni alabilir. Mail botunda mesaj içeriği istemek için bildirime doğrudan yanıt verebilirsin.
-4. İlgili konuda `/id mail` veya `/id mac-m4` gönderirken terminalde aynı botla `seyir id-helper --role mail` veya `seyir id-helper --role mac-m4` çalışsın. Komutu belirli bir bota yöneltmek için Telegram’ın sunduğu `/id@bot_kullanici_adi` biçimini kullanabilirsin.
-5. Botun raporladığı grup ve konu numaralarını ve erişim vereceğin Telegram kullanıcılarının sayısal kimliklerini kaydet. Yardımcıyı Ctrl+C ile kapat. Aynı tokenla tek bir dinleyici çalıştır.
+1. In Telegram, open the official `@BotFather` chat and send `/newbot`. Choose a display name such as **Seyir Mail** or **Seyir Mac**. Each bot needs a unique username ending in `bot`.
+2. Save the mail token as `TELEGRAM_BOT_TOKEN_MAIL` and the Mac token as `TELEGRAM_BOT_TOKEN_MAC_M4` in the local `.env` file. Set up only the roles you plan to run.
+3. Add each bot to your private forum group. Make the Mac bot an administrator with permission to manage topics so it can open session topics and receive their messages. To ask the mail bot for content, reply directly to one of its alerts.
+4. Run `seyir id-helper --role mail` or `seyir id-helper --role mac-m4`. Send `/id mail` or `/id mac-m4` in the corresponding topic. If several bots are present, address one explicitly, for example with `/id@your_bot_username mail`.
+5. Save the reported group and topic IDs and the numeric Telegram IDs of allowed users. Stop the helper with Ctrl+C. Only one polling process should use a given bot token at a time.
 
-Bir token paylaşılırsa BotFather ile yenile, yerel ayarı güncelle ve ilgili botu yeniden başlat.
+If a token is exposed, revoke it through BotFather, update your local configuration, and restart the affected bot.

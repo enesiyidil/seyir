@@ -19,11 +19,11 @@ EVENTS = (
 def install(directory: Path, replace_legacy: bool) -> None:
     python = ROOT / ".venv/bin/python"
     if not python.is_file():
-        raise SystemExit("Önce README'deki .venv kurulumunu tamamlayın.")
+        raise SystemExit("Create the project virtual environment as described in the README first.")
     path = directory / "hooks.json"
     config = json.loads(path.read_text()) if path.exists() else {"version": 1}
     if config.get("version", 1) != 1:
-        raise SystemExit("Cursor hooks.json sürümü desteklenmiyor.")
+        raise SystemExit("Unsupported Cursor hooks.json version.")
     hooks = config.setdefault("hooks", {})
     command = shlex.join([str(python), str(ROOT / "scripts/bildirim-mirror.py")])
     legacy = str(directory / "hooks/bildirim-mirror.py")
@@ -49,13 +49,13 @@ def install(directory: Path, replace_legacy: bool) -> None:
         with tempfile.NamedTemporaryFile(mode="w", dir=directory, delete=False) as tmp:
             tmp.write(rendered)
         os.replace(tmp.name, path)
-    print(f"Cursor hook ayarları hazır: {path}")
+    print(f"Cursor hooks configured: {path}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cursor-dir", type=Path, default=Path.home() / ".cursor")
     parser.add_argument("--replace-legacy", action="store_true",
-                        help="Eski ~/.cursor/hooks/bildirim-mirror.py kaydını taşı")
+                        help="Migrate an existing ~/.cursor/hooks/bildirim-mirror.py registration")
     args = parser.parse_args()
     install(args.cursor_dir, args.replace_legacy)

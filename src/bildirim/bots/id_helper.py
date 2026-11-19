@@ -34,22 +34,22 @@ def format_id_report(
 
     if role_arg and role is None:
         warnings.append(
-            "Bilinmeyen konu. Kullanın: /id mail | /id mac-m4 | /id mac-m1 | /id win11"
+            "Unknown topic. Use /id mail | /id mac-m4 | /id mac-m1 | /id win11"
         )
     if chat_type == "private":
         warnings.append(
-            "Bu özel sohbet. Seyir için kurduğunuz grubu açın, konunun içine girin, komutu orada yazın."
+            "Open a topic in your Seyir group and run the command there."
         )
     elif chat_type == "group":
         warnings.append(
-            "Konular kapalı görünüyor. Grup ayarından Konular'ı açın, sonra komutu konu içinde yazın."
+            "Enable topics in the group settings, then run the command inside a topic."
         )
     elif topic_id is None and chat_type == "supergroup":
-        warnings.append("topic_id yok. Komutu konunun içinde yazın, General dışında.")
+        warnings.append("No topic ID. Run the command inside a topic other than General.")
     elif topic_id == 1:
         warnings.append(
-            "topic_id 1 genellikle General konusudur. "
-            "Mail, Mac-M4, Mac-M1 veya Win11 konusunu açıp komutu orada yazın."
+            "Topic ID 1 usually means General. "
+            "Open the Mail, Mac-M4, Mac-M1, or Win11 topic and run the command there."
         )
 
     if chat_type != "private" and chat_id is not None:
@@ -61,13 +61,13 @@ def format_id_report(
             body.append(f"topic_id={topic_id}")
             if not role_arg:
                 warnings.append(
-                    "Konu anahtarını ekleyin: /id mail | /id mac-m4 | /id mac-m1 | /id win11"
+                    "Specify the topic key with /id mail | /id mac-m4 | /id mac-m1 | /id win11"
                 )
     if user_id is not None:
         body.append(f"TELEGRAM_ALLOWED_USER_IDS={user_id}")
 
     if not body and not warnings:
-        return "Kimlik alınamadı. Komutu grup konusunun içinde tekrar yazın."
+        return "No IDs available. Try again inside a group topic."
     if warnings:
         return "\n".join(warnings + ([""] if body else []) + body)
     return "\n".join(body)
@@ -103,20 +103,20 @@ def run(settings: Settings, role: str) -> None:
         if message is None:
             return
         await message.reply_text(
-            "id-helper ayakta. Konu içinde: /id mail | /id mac-m4 | /id mac-m1 | /id win11"
+            "ID helper is running. In a topic, use /id mail | /id mac-m4 | /id mac-m1 | /id win11"
         )
 
     application = application_type.builder().token(token).build()
     application.add_handler(CommandHandler("id", on_id))
     application.add_handler(CommandHandler("ping", on_ping))
     print(
-        f"id-helper ayakta. Dinleyen bot: {role}.\n"
-        "Her konunun içinde bu bota yazın:\n"
+        f"ID helper is listening with bot role {role}.\n"
+        "Send the matching command to this bot in each topic:\n"
         "  /id mail\n"
         "  /id mac-m4\n"
         "  /id mac-m1\n"
         "  /id win11\n"
-        "Çıktıyı .env dosyasına yapıştırın. Bitince Ctrl+C.",
+        "Copy the output into .env and press Ctrl+C when finished.",
         flush=True,
     )
     application.run_polling(drop_pending_updates=True, allowed_updates=["message"])

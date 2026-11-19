@@ -43,7 +43,7 @@ class Settings:
 
     def require_users(self) -> None:
         if not self.allowed_user_ids:
-            raise SystemExit("TELEGRAM_ALLOWED_USER_IDS gerekli. Kurulum için id-helper kullanın.")
+            raise SystemExit("Set TELEGRAM_ALLOWED_USER_IDS. Use seyir id-helper to find your ID.")
 
     def permits(self, chat_id: int, user_id: int) -> bool:
         return self.group_id == chat_id and user_id in self.allowed_user_ids
@@ -53,9 +53,9 @@ class Settings:
         value = self.tokens.get(role, "")
         if not value:
             raise SystemExit(
-                f"Eksik: {env_name}\n"
-                "Bu anahtarı .env dosyasına yazın. Şablon: .env.example\n"
-                "Tokenı komut satırına yazmayın."
+                f"Missing setting: {env_name}\n"
+                "Save the token in .env using .env.example as a template.\n"
+                "Keep the token out of your shell history."
             )
         return value
 
@@ -133,8 +133,8 @@ def _parse_int(name: str, raw: str) -> int:
     try:
         return int(raw, 10)
     except ValueError:
-        shown = "(gizlendi)" if ":" in raw or len(raw) > 32 else raw
-        raise SystemExit(f"{name} tam sayı olmalı. Yazılan değer: {shown}") from None
+        shown = "(redacted)" if ":" in raw or len(raw) > 32 else raw
+        raise SystemExit(f"{name} must be an integer. Received: {shown}") from None
 
 
 def _parse_id_list(raw: str | None) -> tuple[int, ...]:
@@ -167,4 +167,4 @@ def bridge_secret() -> str:
         value = path.read_text(encoding="utf-8").strip()
         if value:
             return value
-    raise SystemExit("Cursor bağlantısı için önce python scripts/install-hooks.py çalıştırın.")
+    raise SystemExit("Run python scripts/install-hooks.py to configure the Cursor bridge.")

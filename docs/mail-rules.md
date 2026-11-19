@@ -1,12 +1,12 @@
-# Mail sınıflandırması
+# How Seyir classifies mail
 
-Tarayıcı, `MAIL_ACCOUNT` hesabındaki `MAIL_INBOX` klasöründen okunmamış iletileri alır. Bilinen otomasyon bildirimleri ve toplantı katılım yanıtları önce kurallarla elenir. Kalan iletilerin göndereni, konusu, tarihi ve gövdesinin ilk 3.000 karakteri yapılandırılan Qwen sunucusuna iletilir. `MAIL_INTERNAL_DOMAINS` dış gönderici ipucunu belirler.
+The watcher reads unread messages from `MAIL_INBOX` under `MAIL_ACCOUNT` in Apple Mail. Local rules recognize common automated notifications and meeting responses. For remaining messages, the watcher sends the sender, subject, date, and first 3,000 characters of the body to the configured Qwen server. `MAIL_INTERNAL_DOMAINS` helps identify external senders.
 
-| Sınıf | Telegram’a aktarılan | Apple Mail |
+| Classification | Telegram alert | Apple Mail |
 | --- | --- | --- |
-| Toplantı | Konu, zaman ve katılımcılar | Okunmamış kalır |
-| Önemli | Gönderen ve konu | Okunmamış kalır |
-| Gürültü | Bildirim üretilmez | Okundu işaretlenir |
-| Belirsiz | Bildirim üretilmez | Okunmamış kalır |
+| Meeting | Subject, time, and participants | Stays unread |
+| Important | Sender and subject | Stays unread |
+| Noise | None | Marked as read |
+| Uncertain | None | Stays unread |
 
-Yerel geçmiş `data/processed_mail.json` içinde tutulur. Önemli iletinin bildirimine **içerik** diye yanıt verdiğinde kayıtlı metinden bir önizleme gönderilir. Konuda tek başına **içerik** yazarsan en son bildirime bakılır. `seyir mail-once` aynı işlemleri bir kez yapar ve çıkar.
+Seyir stores processing history in `data/processed_mail.json`. Reply to an important alert with `içerik` (“content”) to request its saved body preview. Sending the word on its own in the Mail topic retrieves the latest alert. `seyir mail-once` processes the inbox once and exits.

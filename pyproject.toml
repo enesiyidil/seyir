@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "seyir"
 version = "0.1.0"
-description = "Mac’te e-posta takibi, Cursor oturumları ve Telegram üzerinden Türkçe sesli masaüstü kontrolü."
+description = "Manage Apple Mail and Cursor sessions from Telegram and control your Mac with Turkish voice commands."
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.11"
@@ -13,6 +13,10 @@ authors = [{ name = "Enes İYİDİL" }]
 dependencies = [
   "python-telegram-bot>=21.6,<23",
 ]
+
+[project.urls]
+Repository = "https://github.com/enesiyidil/seyir"
+Issues = "https://github.com/enesiyidil/seyir/issues"
 
 [project.scripts]
 seyir = "bildirim.__main__:main"

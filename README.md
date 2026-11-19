@@ -1,20 +1,24 @@
 # Seyir
 
-Seyir ile Mac’teki önemli e-postaları ve Cursor oturumlarını özel bir Telegram grubunda takip et. Masandan uzaktayken telefondan ekranı açabilir, Türkçe konuşarak uygulama değiştirebilir veya bir mesaj taslağı yazdırabilirsin.
+English · [Türkçe](README.tr.md)
 
-| Nerede? | Ne yapabilirsin? |
+Seyir brings Apple Mail and Cursor agent sessions into a private Telegram group. A local Qwen model picks out important mail. Each Cursor session gets its own topic, where you can follow the conversation and send a message back to the IDE. When you need the desktop, open a temporary screen-sharing link on your phone to use the mouse, type, or speak Turkish commands.
+
+| Telegram topic | What you can do |
 | --- | --- |
-| **Mail konusu** | Apple Mail’deki okunmamış iletileri yerel Qwen ile sınıflandır. Toplantının zamanını ve katılımcılarını gör. Önemli bildirime **içerik** diye yanıt vererek kayıtlı gövde önizlemesini al. |
-| **Cursor oturumunun konusu** | Agent konuşmasını takip et, `/ozet` iste, `/yaz` ile IDE’ye mesaj gönder, `/dur` ile sonraki araç çağrılarını duraklat. |
-| **Mac-M4 konusu** | `/oturumlar` ile oturumları gör. `/ekran` ile masaüstü panelini aç, telefondan fare ve klavye kullan veya **Konuşmayı aç** ile Türkçe sesli komut ver. |
+| **Mail** | See meeting details and important messages. Reply to an alert with `içerik` to read a preview of the message body. |
+| **Cursor session** | Ask for a summary with `/ozet`, send a prompt to that session with `/yaz`, or pause subsequent tool calls with `/dur`. |
+| **Mac-M4** | List sessions with `/oturumlar`. Open the desktop panel with `/ekran` and close it with `/ekran dur`. |
 
-**“Ekranı sağa kaydır”** bir sonraki macOS masaüstüne geçer. **“Sayfayı sağa kaydır”** odaktaki uygulamayı kaydırır. **“Codex’e merhaba yaz”** taslak oluşturur. Telegram’daki **`/yaz merhaba`** ise ilgili Cursor oturumuna mesajı gönderir.
+The desktop assistant speaks Turkish. For example, *“Ekranı sağa kaydır”* moves to the next macOS Space, and *“Sayfayı sağa kaydır”* scrolls the current page horizontally. *“Codex’e merhaba yaz”* drafts a greeting in Codex. The Telegram command `/yaz merhaba` sends that greeting to the Cursor agent in the current topic.
 
-## Kurulum
+## Install
 
-macOS’ta oturum açmış bir kullanıcı ve Python 3.11 veya üzeri gerekir. Komutları klonladığın proje klasöründe çalıştır. Mail ve Mac botlarını ayrı ayrı kurabilirsin.
+Use a logged-in macOS desktop session and Python 3.11 or later. You can run the mail bot, the Mac bot, or both.
 
 ```sh
+git clone https://github.com/enesiyidil/seyir.git
+cd seyir
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
@@ -23,52 +27,52 @@ chmod 600 .env
 seyir --help
 ```
 
-1. Telegram’da konuları açık **özel bir grup** oluştur. Kullanacağın her rol için BotFather ile ayrı bot oluştur, tokenını `.env` içine yaz ve botu gruba ekle. Cursor botuna **Konuları yönet** yetkisi ver. [Telegram kurulumu](docs/botfather.md)
-2. Grupta ilgili konuyu aç. Terminalde `seyir id-helper --role mail` veya `seyir id-helper --role mac-m4` çalışırken o konuda `/id mail` ya da `/id mac-m4` yaz. Çıkan grup, konu ve kendi kullanıcı numaranı `.env` dosyasına kaydet. Ardından yardımcıyı Ctrl+C ile kapat.
-3. Aşağıda kullanacağın rolün adımlarını tamamla. Botu önce terminalde çalıştırmak macOS izin pencerelerini ve yapılandırma hatalarını görmeyi kolaylaştırır.
+1. Create a private Telegram group with topics enabled. Create a separate bot for each role you plan to run. Save its token in `.env`, add it to the group, and grant the Mac bot permission to manage topics. [Telegram setup](docs/botfather.md)
+2. Run `seyir id-helper --role mail` or `seyir id-helper --role mac-m4`. In the corresponding Telegram topic, send `/id mail` or `/id mac-m4`. Copy the reported group, topic, and allowed user IDs into `.env`. Stop the helper with Ctrl+C.
+3. Start your chosen bot in a terminal for the first run so you can see permission prompts and configuration errors.
 
-### Mail ve Qwen
+### Apple Mail and local Qwen
 
-Apple Mail’de hesabın eşitlenmiş olmalı. `MAIL_ACCOUNT` ve `MAIL_INBOX` için Mail’de görünen adları yaz. `MAIL_INTERNAL_DOMAINS` virgülle ayrılmış şirket alan adlarını kabul eder. Yerel oMLX sunucusunu başlat, `OMLX_BASE_URL` ve `OMLX_MODEL` değerlerini kendi sunucuna göre ayarla. Anahtar `OMLX_API_KEY` veya yerel oMLX ayarlarından okunur.
+Sync your account in Apple Mail. Set `MAIL_ACCOUNT` and `MAIL_INBOX` to the names shown in Mail. Set `MAIL_INTERNAL_DOMAINS` to a comma-separated list of your organization's domains. Start your local oMLX server and set `OMLX_BASE_URL` and `OMLX_MODEL` to match. Seyir reads the API key from `OMLX_API_KEY` or your local oMLX settings.
 
 ```sh
 seyir mail
 ```
 
-İlk tarama gerçek gelen kutusunu işler. Gürültü olarak sınıflandırılan iletiler **okundu** işaretlenir. Önemli iletiler ve toplantılar okunmamış kalır. [Sınıflandırma ve bildirimler](docs/mail-rules.md)
+The first scan processes your actual inbox. Messages classified as noise are **marked as read**. Meetings and important messages stay unread. [Mail classification rules](docs/mail-rules.md)
 
-### Cursor ve sesli ekran paneli
+### Cursor and desktop control
 
-Mac’te Cursor ve Apple komut satırı geliştirici araçları gerekir. Masaüstü panelinin HTTPS bağlantısı için `cloudflared`, ses ve pencere yayını için `ffmpeg` gerekir. Homebrew kullanıyorsan `brew install cloudflared ffmpeg` ile kurabilirsin. Ekran soruları, konu sohbeti ve özetler için Cursor CLI (`cursor-agent`) ve `CURSOR_API_KEY` ayarla.
+Install Cursor and the Apple Command Line Tools. The desktop panel uses `cloudflared` for HTTPS and `ffmpeg` for audio and window streaming. With Homebrew, run `brew install cloudflared ffmpeg`. For screen questions, topic conversations, and summaries, configure the Cursor CLI (`cursor-agent`) and `CURSOR_API_KEY`.
 
 ```sh
 python scripts/install-hooks.py
 seyir agent --role mac-m4
 ```
 
-Kurucu mevcut Cursor hook’larına Seyir’i ekler ve Mac’e özel bir köprü anahtarı üretir. Cursor’u yeniden açıp bir Agent sohbeti başlat. İlk kullanımda macOS’un istediği Ekran Kaydı, Erişilebilirlik, Otomasyon ve Konuşma Tanıma izinlerini ilgili uygulama veya yardımcı için ver. Mac-M4 konusunda `/ekran` yaz, bağlantıyı telefon tarayıcısında aç ve ses için mikrofon iznini ver. Oturumu `/ekran dur` ile kapatabilirsin. [Komutlar, örnekler ve pencere yayını](docs/cursor-telegram-mirror.md)
+The installer adds events to your existing Cursor hooks and generates a local bridge secret. Reopen Cursor and start an agent chat. Grant Screen Recording, Accessibility, Automation, and Speech Recognition permissions to the relevant apps or helpers when macOS prompts you. In the Mac-M4 topic, send `/ekran` and open the link in your phone's browser. To speak, tap **Konuşmayı aç** and allow microphone access. [Cursor commands and screen sharing](docs/cursor-telegram-mirror.md)
 
-### Arka planda çalıştırma
+### Run in the background
 
-Ön planda başlattığın botu Ctrl+C ile kapat. Etkinleştireceğin rolün komutunu çalıştır.
+Stop the foreground bot with Ctrl+C before starting its service. Run the command for each role you want to enable.
 
 ```sh
 scripts/mail-service.sh start
 scripts/mac-m4-service.sh start
 ```
 
-Her iki betik de `status` ve `stop` kabul eder. Günlükler `data/logs/` altındadır. Mac-M1 ve Win11 rolleri bu sürümde yalnızca `/ping` yanıtı verir.
+Both scripts accept `status` and `stop`. Logs are in `data/logs/`. The optional Mac-M1 and Win11 roles currently support only `/ping`.
 
-### Önceki kurulumdan güncelleme
+### Upgrade an existing installation
 
-Projeyi mevcut klasöründe güncelleyip `.venv/bin/python -m pip install -e .` çalıştır. Yeni komut `seyir`. Önceki `bildirim` komutu ve `BILDIRIM_*` ayarları da desteklenir. Aynı ayarı iki adla verirsen `SEYIR_*` değeri kullanılır. Mevcut Telegram konularını, Cursor hook kayıtlarını ve Mac izinlerini kullanmaya devam edebilirsin.
+Update the checkout in place and run `.venv/bin/python -m pip install -e .`. Existing Telegram topics, Cursor hooks, and macOS permissions carry over. The previous `bildirim` command and `BILDIRIM_*` settings remain supported. If both names are set, the `SEYIR_*` value takes precedence.
 
-## Veriler nereye gider?
+## Where your data goes
 
-- Mail sınıflandırması yapılandırdığın model sunucusunda yapılır. Varsayılan adres bu Mac’tedir. Özet ve istenen içerik Telegram grubunun üyelerine görünür.
-- Etkin Cursor hook’ları IDE olaylarını ve sohbetten bölümleri Telegram’a aktarır. Konu sohbeti, özetler ve ekranla ilgili açık uçlu sorular, ilgili metni veya ekran görüntüsünü yapılandırılan model hizmetine gönderebilir.
-- Mac-M4 paneli ekranı Cloudflare tünelinden sunar. **Geçerli bağlantıyı alan kişi oturum boyunca Mac’i kontrol edebilir.** Bağlantıyı yalnız güvendiğin kişilerin bulunduğu grupta kullan. `/ekran dur` ile erişimi sonlandırabilirsin.
-- `.env`, özel ağ ayarları ve `data/` altındaki posta önizlemeleri, oturum izleri, anahtarlar, ekran ve ses dosyaları yereldir. Hata bildirirken kendi verilerini ayıklayarak paylaş.
+- The configured model server classifies mail. Its default address is on this Mac. Telegram group members can see alerts and any message preview requested in the topic.
+- Cursor hooks relay IDE activity and conversation excerpts to Telegram. Summaries, topic chat, and open-ended screen questions can send relevant text or a screenshot to the configured model provider.
+- The desktop panel serves the screen through a Cloudflare tunnel. **Anyone with the active link can control the Mac for that session.** Share it only in a trusted group and use `/ekran dur` to end access.
+- Credentials, private network settings, and runtime files under `data/` stay outside Git. Runtime files can contain mail previews, session traces, screen captures, and audio. Remove personal data before sharing diagnostics.
 
 ## Test
 
@@ -76,6 +80,6 @@ Projeyi mevcut klasöründe güncelleyip `.venv/bin/python -m pip install -e .` 
 python -m unittest discover -s tests -v
 ```
 
-Testler örnek verilerle çalışır. Telefon mikrofonunu ve gerçek uygulama izinlerini kendi Mac’inde sınamak için [ilk kullanım kontrolünü](docs/user-checklist.md) izleyebilirsin.
+The test suite uses fixtures. For phone microphone access, real application permissions, and an end-to-end check on your Mac, follow the [first-run checklist](docs/user-checklist.md).
 
-[MIT lisansı](LICENSE)
+[MIT license](LICENSE)

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""Cursor hook → local bildirim mac-m4 bridge (IDE mirror + hard-ish stop)."""
+"""Cursor hook → local Seyir mac-m4 bridge (IDE mirror + hard-ish stop)."""
 
 from __future__ import annotations
 
 import json
-import os
 import sys
 import urllib.request
-from pathlib import Path
 
-from bildirim.config import bridge_secret, load_settings, project_root
+from bildirim.config import bridge_secret, load_settings, project_root, project_setting
 
 ROOT = project_root()
 PORT_FILE = ROOT / "data" / "bridge.port"
@@ -34,7 +32,7 @@ def bridge_url() -> str:
             port = int(PORT_FILE.read_text(encoding="utf-8").strip())
         except ValueError:
             pass
-    env_port = os.environ.get("BILDIRIM_BRIDGE_PORT")
+    env_port = project_setting("BRIDGE_PORT")
     if env_port:
         try:
             port = int(env_port)
@@ -78,7 +76,7 @@ def post_hook(payload: dict) -> dict:
             body = json.loads(resp.read().decode("utf-8"))
             return body if isinstance(body, dict) else {}
     except Exception as exc:  # noqa: BLE001
-        print(f"bildirim-mirror bridge error: {exc}", file=sys.stderr)
+        print(f"Seyir bridge error: {exc}", file=sys.stderr)
         return {"ok": False, "deny": False}
 
 
@@ -132,7 +130,7 @@ def main() -> int:
     deny = local_deny or bool(result.get("deny"))
     message = str(
         result.get("message")
-        or "Bildirim /dur — oturum kilitli (tool/shell/MCP/alt-ajan kapalı)."
+        or "Seyir /dur — oturum kilitli (tool/shell/MCP/alt-ajan kapalı)."
     )
 
     if event == "stop" and (local_deny or result.get("block_followup")):

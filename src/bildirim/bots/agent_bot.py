@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import os
 import secrets
 import subprocess
 import threading
@@ -14,7 +13,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from bildirim.bots.runtime import run_ping_bot
-from bildirim.config import AGENT_ROLES, Settings, bridge_secret, project_root
+from bildirim.config import AGENT_ROLES, Settings, bridge_secret, project_root, project_setting
 from bildirim.cursor_agent_cli import (
     GROK_SENTINEL,
     cli_spawn_active,
@@ -68,7 +67,7 @@ def _run_mac_m4(settings: Settings) -> None:
         raise SystemExit("TELEGRAM_TOPIC_MAC_M4 gerekli (fallback konu).")
 
     store = SessionStore()
-    bridge_port = int(os.environ.get("BILDIRIM_BRIDGE_PORT", str(DEFAULT_BRIDGE_PORT)))
+    bridge_port = int(project_setting("BRIDGE_PORT", str(DEFAULT_BRIDGE_PORT)))
 
     mirror = MirrorService(
         settings=settings,
@@ -600,7 +599,7 @@ class MirrorService:
                 return {
                     "ok": True,
                     "deny": True,
-                    "message": "Bildirim /dur — oturum kilitli (tool/shell/MCP/alt-ajan kapalı).",
+                    "message": "Seyir /dur — oturum kilitli (tool/shell/MCP/alt-ajan kapalı).",
                 }
 
         # stop hook: auto-followup üretme
@@ -609,7 +608,7 @@ class MirrorService:
                 "ok": True,
                 "deny": False,
                 "block_followup": True,
-                "message": "Bildirim /dur — follow-up yok.",
+                "message": "Seyir /dur — follow-up yok.",
             }
 
         if not conversation_id and event not in {"", "ping"}:

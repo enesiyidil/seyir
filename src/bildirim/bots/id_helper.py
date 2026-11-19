@@ -38,7 +38,7 @@ def format_id_report(
         )
     if chat_type == "private":
         warnings.append(
-            "Bu özel sohbet. Bildirim grubunu açın, konunun içine girin, komutu orada yazın."
+            "Bu özel sohbet. Seyir için kurduğunuz grubu açın, konunun içine girin, komutu orada yazın."
         )
     elif chat_type == "group":
         warnings.append(

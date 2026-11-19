@@ -1,4 +1,4 @@
-"""CLI: python -m bildirim mail | agent --role mac-m4 | id-helper"""
+"""CLI: seyir mail | agent --role mac-m4 | id-helper"""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from bildirim.config import AGENT_ROLES, ROLE_TOKEN_ENV, load_settings
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        prog="python -m bildirim",
-        description="Telegram bildirim köprüsü.",
+        prog="seyir",
+        description="Seyir ile Apple Mail, Cursor ve Mac masaüstüne Telegram üzerinden eriş.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 

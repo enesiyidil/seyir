@@ -1,6 +1,6 @@
-# Bildirim Bridge
+# Seyir
 
-Mac’teki önemli e-postaları ve Cursor oturumlarını özel bir Telegram grubunda takip et. Masandan uzaktayken telefondan ekranı açabilir, Türkçe konuşarak uygulama değiştirebilir veya bir mesaj taslağı yazdırabilirsin.
+Seyir ile Mac’teki önemli e-postaları ve Cursor oturumlarını özel bir Telegram grubunda takip et. Masandan uzaktayken telefondan ekranı açabilir, Türkçe konuşarak uygulama değiştirebilir veya bir mesaj taslağı yazdırabilirsin.
 
 | Nerede? | Ne yapabilirsin? |
 | --- | --- |
@@ -20,11 +20,11 @@ source .venv/bin/activate
 python -m pip install -e .
 cp -n .env.example .env
 chmod 600 .env
-bildirim --help
+seyir --help
 ```
 
 1. Telegram’da konuları açık **özel bir grup** oluştur. Kullanacağın her rol için BotFather ile ayrı bot oluştur, tokenını `.env` içine yaz ve botu gruba ekle. Cursor botuna **Konuları yönet** yetkisi ver. [Telegram kurulumu](docs/botfather.md)
-2. Grupta ilgili konuyu aç. Terminalde `bildirim id-helper --role mail` veya `bildirim id-helper --role mac-m4` çalışırken o konuda `/id mail` ya da `/id mac-m4` yaz. Çıkan grup, konu ve kendi kullanıcı numaranı `.env` dosyasına kaydet. Ardından yardımcıyı Ctrl+C ile kapat.
+2. Grupta ilgili konuyu aç. Terminalde `seyir id-helper --role mail` veya `seyir id-helper --role mac-m4` çalışırken o konuda `/id mail` ya da `/id mac-m4` yaz. Çıkan grup, konu ve kendi kullanıcı numaranı `.env` dosyasına kaydet. Ardından yardımcıyı Ctrl+C ile kapat.
 3. Aşağıda kullanacağın rolün adımlarını tamamla. Botu önce terminalde çalıştırmak macOS izin pencerelerini ve yapılandırma hatalarını görmeyi kolaylaştırır.
 
 ### Mail ve Qwen
@@ -32,7 +32,7 @@ bildirim --help
 Apple Mail’de hesabın eşitlenmiş olmalı. `MAIL_ACCOUNT` ve `MAIL_INBOX` için Mail’de görünen adları yaz. `MAIL_INTERNAL_DOMAINS` virgülle ayrılmış şirket alan adlarını kabul eder. Yerel oMLX sunucusunu başlat, `OMLX_BASE_URL` ve `OMLX_MODEL` değerlerini kendi sunucuna göre ayarla. Anahtar `OMLX_API_KEY` veya yerel oMLX ayarlarından okunur.
 
 ```sh
-bildirim mail
+seyir mail
 ```
 
 İlk tarama gerçek gelen kutusunu işler. Gürültü olarak sınıflandırılan iletiler **okundu** işaretlenir. Önemli iletiler ve toplantılar okunmamış kalır. [Sınıflandırma ve bildirimler](docs/mail-rules.md)
@@ -43,10 +43,10 @@ Mac’te Cursor ve Apple komut satırı geliştirici araçları gerekir. Masaüs
 
 ```sh
 python scripts/install-hooks.py
-bildirim agent --role mac-m4
+seyir agent --role mac-m4
 ```
 
-Kurucu mevcut Cursor hook’larına Bildirim’i ekler ve Mac’e özel bir köprü anahtarı üretir. Cursor’u yeniden açıp bir Agent sohbeti başlat. İlk kullanımda macOS’un istediği Ekran Kaydı, Erişilebilirlik, Otomasyon ve Konuşma Tanıma izinlerini ilgili uygulama veya yardımcı için ver. Mac-M4 konusunda `/ekran` yaz, bağlantıyı telefon tarayıcısında aç ve ses için mikrofon iznini ver. Oturumu `/ekran dur` ile kapatabilirsin. [Komutlar, örnekler ve pencere yayını](docs/cursor-telegram-mirror.md)
+Kurucu mevcut Cursor hook’larına Seyir’i ekler ve Mac’e özel bir köprü anahtarı üretir. Cursor’u yeniden açıp bir Agent sohbeti başlat. İlk kullanımda macOS’un istediği Ekran Kaydı, Erişilebilirlik, Otomasyon ve Konuşma Tanıma izinlerini ilgili uygulama veya yardımcı için ver. Mac-M4 konusunda `/ekran` yaz, bağlantıyı telefon tarayıcısında aç ve ses için mikrofon iznini ver. Oturumu `/ekran dur` ile kapatabilirsin. [Komutlar, örnekler ve pencere yayını](docs/cursor-telegram-mirror.md)
 
 ### Arka planda çalıştırma
 
@@ -58,6 +58,10 @@ scripts/mac-m4-service.sh start
 ```
 
 Her iki betik de `status` ve `stop` kabul eder. Günlükler `data/logs/` altındadır. Mac-M1 ve Win11 rolleri bu sürümde yalnızca `/ping` yanıtı verir.
+
+### Önceki kurulumdan güncelleme
+
+Projeyi mevcut klasöründe güncelleyip `.venv/bin/python -m pip install -e .` çalıştır. Yeni komut `seyir`. Önceki `bildirim` komutu ve `BILDIRIM_*` ayarları da desteklenir. Aynı ayarı iki adla verirsen `SEYIR_*` değeri kullanılır. Mevcut Telegram konularını, Cursor hook kayıtlarını ve Mac izinlerini kullanmaya devam edebilirsin.
 
 ## Veriler nereye gider?
 

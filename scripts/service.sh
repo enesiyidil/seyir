@@ -20,7 +20,7 @@ args = ["mail"] if role == "mail" else ["agent", "--role", "mac-m4"]
 prefix = f"{root}/data/logs/{role}-bot"
 descriptor = {
     "Label": f"local.bildirim.{role}",
-    "ProgramArguments": [f"{root}/.venv/bin/python", "-m", "bildirim", *args],
+    "ProgramArguments": [f"{root}/.venv/bin/python", "-m", "seyir", *args],
     "WorkingDirectory": root, "RunAtLoad": True, "KeepAlive": True,
     "ThrottleInterval": 5, "LimitLoadToSessionType": "Aqua", "ProcessType": "Background",
     "StandardOutPath": prefix + ".out.log", "StandardErrorPath": prefix + ".err.log",

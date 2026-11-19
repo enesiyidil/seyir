@@ -28,7 +28,7 @@ Oturum konusunda IDE’ye açıkça mesaj göndermek için `/yaz` kullan.
 - **Oturum konusu** (IDE mirror’ın açtığı topic): o IDE agent’ın izleri + konu geçmişi. Yalnızca o oturumu `dur`/`devam`/`ozet` edebilir. “şunu yaz / devam et” dersen IDE kutusuna `yaz` aksiyonu gider.
 - CLI Grok turları ve IDE alt ajanları yeni Telegram konusu açmaz. Konu yalnız üst IDE oturumunda açılır.
 - Hafıza: `data/topic_chats/<topic_id>.jsonl`
-- Model: `cursor-agent --list-models` → en yüksek Grok (öncelik: sürüm, sonra xhigh). Cache `data/grok_model_cache.json` (~1 saat). `BILDIRIM_GROK_MODEL` ile kilitle.
+- Model: `cursor-agent --list-models` → en yüksek Grok (öncelik: sürüm, sonra xhigh). Cache `data/grok_model_cache.json` (~1 saat). `SEYIR_GROK_MODEL` ile kilitle.
 
 ## Bileşenler
 
@@ -110,7 +110,7 @@ O anda akan model cevabı için IDE **Stop**. Sonra tool/alt-ajan yeniden başla
 
 ## Limit
 
-Kullanım sorgusu isteğe bağlıdır. Kendi Cursor oturum anahtarını yerel `.env` içindeki `CURSOR_SESSION_TOKEN` ayarına gir veya `bildirim cursor-auth` ile gizli istemde kaydet. Dosya yolu `data/cursor_session.token` ve izinleri `0600` olur. Terminalde `bildirim limit` ile dene. Cursor kullanım uç noktası değişirse hesap panelinden kontrol edebilirsin.
+Kullanım sorgusu isteğe bağlıdır. Kendi Cursor oturum anahtarını yerel `.env` içindeki `CURSOR_SESSION_TOKEN` ayarına gir veya `seyir cursor-auth` ile gizli istemde kaydet. Dosya yolu `data/cursor_session.token` ve izinleri `0600` olur. Terminalde `seyir limit` ile dene. Cursor kullanım uç noktası değişirse hesap panelinden kontrol edebilirsin.
 
 ## Servis
 

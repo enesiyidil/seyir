@@ -3,9 +3,9 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bildirim"
+name = "seyir"
 version = "0.1.0"
-description = "Telegram bildirim köprüsü. E-posta ve bilgisayar ajanları için ayrı botlar."
+description = "Mac’te e-posta takibi, Cursor oturumları ve Telegram üzerinden Türkçe sesli masaüstü kontrolü."
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.11"
@@ -15,6 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
+seyir = "bildirim.__main__:main"
 bildirim = "bildirim.__main__:main"
 
 [tool.setuptools.packages.find]

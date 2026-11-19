@@ -31,13 +31,13 @@ def fetch_usage_summary() -> UsageSummary:
     """Return a human-readable usage blurb for Telegram /limit."""
     token, auth_id, source = _resolve_access_token()
     if not token:
-        return UsageSummary(False, "Kullanım sorgusu için CURSOR_SESSION_TOKEN ayarla veya terminalde bildirim cursor-auth çalıştır.")
+        return UsageSummary(False, "Kullanım sorgusu için CURSOR_SESSION_TOKEN ayarla veya terminalde seyir cursor-auth çalıştır.")
 
     body, err = _get_usage_summary(token, auth_id)
     if body is None:
         parts = [
             f"Cursor limit API yanıt vermedi ({err}).",
-            "Oturumu yenile: .venv/bin/python -m bildirim cursor-auth",
+            "Oturumu yenile: .venv/bin/python -m seyir cursor-auth",
             "Dashboard: https://cursor.com/settings (Usage)",
             f"Auth kaynağı: {source}",
         ]
@@ -56,7 +56,7 @@ def save_session_interactive() -> UsageSummary:
     with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as tmp:
         tmp.write(value)
     os.replace(tmp.name, path)
-    return UsageSummary(True, "Oturum kaydedildi. Kullanımı bildirim limit ile kontrol edebilirsin.")
+    return UsageSummary(True, "Oturum kaydedildi. Kullanımı seyir limit ile kontrol edebilirsin.")
 
 
 def _resolve_access_token() -> tuple[str | None, str | None, str]:

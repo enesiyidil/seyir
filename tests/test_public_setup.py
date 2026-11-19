@@ -13,12 +13,20 @@ import urllib.request
 
 from bildirim import cursor_usage
 from bildirim.bots.agent_bot import _start_bridge
-from bildirim.config import Settings
+from bildirim.config import Settings, project_setting
 from bildirim.mail import applescript, rules, watcher
 from bildirim.mail.store import ProcessedStore
 
 
 class PublicSetupTest(unittest.TestCase):
+    def test_seyir_settings_accept_previous_names(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(project_setting("BRIDGE_PORT", "18765"), "18765")
+            os.environ["BILDIRIM_BRIDGE_PORT"] = "12345"
+            self.assertEqual(project_setting("BRIDGE_PORT"), "12345")
+            os.environ["SEYIR_BRIDGE_PORT"] = "23456"
+            self.assertEqual(project_setting("BRIDGE_PORT"), "23456")
+
     def test_commands_require_user_and_group(self):
         empty = Settings({}, -10, {}, ())
         with self.assertRaises(SystemExit):

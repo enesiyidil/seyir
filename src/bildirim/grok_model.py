@@ -11,7 +11,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from bildirim.config import project_root
+from bildirim.config import project_root, project_setting
 
 FALLBACK_GROK_MODEL = "grok-4.7-xhigh"
 CACHE_TTL_SEC = 3600
@@ -36,7 +36,7 @@ def cache_path() -> Path:
 
 
 def resolve_top_grok(*, force_refresh: bool = False) -> str:
-    override = (os.environ.get("BILDIRIM_GROK_MODEL") or "").strip()
+    override = project_setting("GROK_MODEL")
     if override:
         return override
 

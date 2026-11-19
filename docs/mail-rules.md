@@ -9,4 +9,4 @@ Tarayıcı, `MAIL_ACCOUNT` hesabındaki `MAIL_INBOX` klasöründen okunmamış i
 | Gürültü | Bildirim üretilmez | Okundu işaretlenir |
 | Belirsiz | Bildirim üretilmez | Okunmamış kalır |
 
-Yerel geçmiş `data/processed_mail.json` içinde tutulur. Önemli iletinin bildirimine **içerik** diye yanıt verdiğinde kayıtlı metinden bir önizleme gönderilir. Konuda tek başına **içerik** yazarsan en son bildirime bakılır. `bildirim mail-once` aynı işlemleri bir kez yapar ve çıkar.
+Yerel geçmiş `data/processed_mail.json` içinde tutulur. Önemli iletinin bildirimine **içerik** diye yanıt verdiğinde kayıtlı metinden bir önizleme gönderilir. Konuda tek başına **içerik** yazarsan en son bildirime bakılır. `seyir mail-once` aynı işlemleri bir kez yapar ve çıkar.

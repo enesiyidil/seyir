@@ -1,4 +1,4 @@
-"""Load Bildirim settings from the environment and the project .env file."""
+"""Load Seyir settings from the environment and the project .env file."""
 
 from __future__ import annotations
 
@@ -149,8 +149,17 @@ def _parse_id_list(raw: str | None) -> tuple[int, ...]:
     return tuple(dict.fromkeys(found))
 
 
+def project_setting(name: str, default: str = "") -> str:
+    """Resolve a Seyir option, including settings from earlier installations."""
+    return (
+        _clean(os.environ.get(f"SEYIR_{name}"))
+        or _clean(os.environ.get(f"BILDIRIM_{name}"))
+        or default
+    )
+
+
 def bridge_secret() -> str:
-    configured = os.environ.get("BILDIRIM_BRIDGE_SECRET", "").strip()
+    configured = project_setting("BRIDGE_SECRET")
     if configured:
         return configured
     path = project_root() / "data" / "bridge.secret"
